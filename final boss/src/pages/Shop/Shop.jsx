@@ -8,14 +8,14 @@ import PopularPost from "./PopularPost";
 import Tags from "./Tags";
 import ProductCards from "./ProductCards";
 const showResult = "Showing 01 - 12 of 139 Results";
-import Data from "/src/products.json"
+import Data from "/src/products.json";
 
 const Shop = () => {
   const [GridList, setGridList] = useState(true);
   const [products, setProducts] = useState(Data);
 
   //   category active colors
-const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   // pagination
   // Get current products to display
@@ -41,7 +41,7 @@ const [selectedCategory, setSelectedCategory] = useState("All");
     const newItem = Data.filter((newVal) => {
       return newVal.category === curcat;
     });
-    setSelectedCategory(curcat); 
+    setSelectedCategory(curcat);
     setProducts(newItem);
     // console.log(selectedCategory)
   };
@@ -94,10 +94,9 @@ const [selectedCategory, setSelectedCategory] = useState("All");
                   setItem={setProducts}
                   menuItems={menuItems}
                   setProducts={setProducts}
-                  selectedCategory={selectedCategory }
+                  selectedCategory={selectedCategory}
                 />
-                <PopularPost/>
-                <Tags />
+                <PopularPost />
               </aside>
             </div>
           </div>

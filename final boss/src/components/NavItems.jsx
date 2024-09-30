@@ -96,11 +96,7 @@ const NavItems = () => {
                       Shop
                     </Link>
                   </li>
-                  <li>
-                    <Link to="/blog" style={{ color: "#ffffff" }}>
-                      Blog
-                    </Link>
-                  </li>
+
                   <li>
                     <NavLink to="/about" style={{ color: "#ffffff" }}>
                       About

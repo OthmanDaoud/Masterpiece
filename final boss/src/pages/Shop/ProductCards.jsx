@@ -16,7 +16,11 @@ const ProductCards = ({ products, GridList }) => {
           <div className="product-item">
             <div className="product-thumb">
               <div className="pro-thumb">
-                <img src={`${product.img}`} alt={`${product.img}`} />
+                <img
+                  src={`${product.img}`}
+                  alt={`${product.img}`}
+                  style={{ objectFit: "fit", height: "200px", width: "100%" }}
+                />
               </div>
               <div className="product-action-link">
                 <Link to={`/shop/${product.id}`}>
@@ -37,7 +41,7 @@ const ProductCards = ({ products, GridList }) => {
               <p className="productRating">
                 <Rating />
               </p>
-              <h6>${product.price}</h6>
+              <h6>{product.price} JD</h6>
             </div>
           </div>
           <div className="product-list-item">
@@ -58,11 +62,11 @@ const ProductCards = ({ products, GridList }) => {
               </div>
             </div>
             <div className="product-content">
-            <Link to={`/shop/${product.id}`}>{product.name}</Link>
+              <Link to={`/shop/${product.id}`}>{product.name}</Link>
               <p className="productRating">
                 <Rating />
               </p>
-              <h6>${product.price}</h6>
+              <h6>{product.price} JD</h6>
               <p>{product.seller}</p>
             </div>
           </div>

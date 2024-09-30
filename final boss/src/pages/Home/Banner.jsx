@@ -13,7 +13,7 @@ const images = [
     src: Image1,
     title: "Construction Materials",
     description:
-      "High-quality construction materials for all your building needs.",
+      "You can buy High-quality construction materials for all your building needs.",
     link: "/shop/construction",
   },
   {
@@ -26,25 +26,28 @@ const images = [
   {
     src: Image3,
     title: "Paint Supplies",
-    description: "Premium paints and supplies for a perfect finish.",
+    description: "You have Premium paints and supplies for a perfect finish.",
     link: "/shop/paint",
   },
   {
     src: Image4,
     title: "Pumps",
-    description: "Efficient and reliable pumps for various applications.",
+    description:
+      "Also, we have Efficient and reliable pumps for various applications.",
     link: "/shop/pump",
   },
   {
     src: Image5,
     title: "Wood Materials",
-    description: "Quality wood materials for construction and furniture.",
+    description:
+      "We can provide for you Quality wood materials for construction and furniture.",
     link: "/shop/wood",
   },
   {
     src: Image6,
     title: "Steel Products",
-    description: "Durable steel products for industrial and construction use.",
+    description:
+      "Of course, you need steel products for industrial and construction use.",
     link: "/shop/steel",
   },
 ];
@@ -84,17 +87,6 @@ const Banner = () => {
                 <p style={{ fontSize: "1.5rem", color: "white" }}>
                   {image.description}
                 </p>
-                <Link
-                  to={image.link}
-                  className="btn"
-                  style={{
-                    backgroundColor: "rgb(243,132,24)",
-                    color: "#fff",
-                    borderColor: "rgb(243,132,24)",
-                  }}
-                >
-                  Shop Now
-                </Link>
               </div>
             </Carousel.Caption>
           </Carousel.Item>

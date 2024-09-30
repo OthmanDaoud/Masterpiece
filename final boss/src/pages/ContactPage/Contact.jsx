@@ -14,25 +14,25 @@ const contactList = [
     imgUrl: "/src/assets/images/icon/01.png",
     imgAlt: "contact icon",
     title: "Office Address",
-    desc: "1201 park street, Fifth Avenue",
+    desc: "Orange Digital Village Zarqa, Jordan",
   },
   {
     imgUrl: "/src/assets/images/icon/02.png",
     imgAlt: "contact icon",
     title: "Phone number",
-    desc: "+22698 745 632,02 982 745",
+    desc: "+962 780 848 097",
   },
   {
     imgUrl: "/src/assets/images/icon/03.png",
     imgAlt: "contact icon",
     title: "Send email",
-    desc: "admin@shopcart.com",
+    desc: "o.daoued@gmail.com",
   },
   {
     imgUrl: "/src/assets/images/icon/04.png",
     imgAlt: "contact icon",
     title: "Our website",
-    desc: "www.shopcart.com",
+    desc: "http://localhost:5173/",
   },
 ];
 

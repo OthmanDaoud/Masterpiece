@@ -4,32 +4,33 @@ import Rating from "./Sidebar/rating";
 const reviwtitle = "Add a Review";
 let ReviewList = [
   {
-    imgUrl: "/src/assets/images/instructor/01.jpg",
+    imgUrl:
+      "https://scontent.famm7-1.fna.fbcdn.net/v/t39.30808-6/434472502_2942113115942513_1397923943338398724_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFpJNkD_lL2ih0TTXHdOm6U1Uzqv6dkeV7VTOq_p2R5Xvb0DVUh2PbNe7HV18_tG5NMaABSa8B9WR6Q3RiefUhQ&_nc_ohc=L0iuWr4RHe4Q7kNvgE5AenI&_nc_ht=scontent.famm7-1.fna&oh=00_AYAVAR6B8tL6UDCo2n0qFGnLamZ7tuvgdC8IMrQK9JXCCw&oe=66B697B2",
     imgAlt: "Client thumb",
-    name: "Ganelon Boileau",
+    name: "Muhammad-Shurrab",
     date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "Enthusiast build innovativ initiatives before lonterm high-impact awesome theme seo psd porta monetize covalent leadership after without resource.",
+    desc: "هذا المنتج رهيب 💙",
   },
   {
-    imgUrl: "/src/assets/images/instructor/02.jpg",
+    imgUrl: "/src/assets/images/warshtK/malek.png",
     imgAlt: "Client thumb",
-    name: "Morgana Cailot",
+    name: "Malek",
     date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "Enthusiast build innovativ initiatives before lonterm high-impact awesome theme seo psd porta monetize covalent leadership after without resource.",
+    desc: "كانت تجربة جميلة التعامل معكم",
   },
   {
-    imgUrl: "/src/assets/images/instructor/03.jpg",
-    imgAlt: "Client thumb",
-    name: "Telford Bois",
+    imgUrl: "/src/assets/images/warshtK/yousef.png",
+    imgAlt: "Yousef",
+    name: "Yousef",
     date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "Enthusiast build innovativ initiatives before lonterm high-impact awesome theme seo psd porta monetize covalent leadership after without resource.",
+    desc: "خدمة مميزة في التوصيل",
   },
   {
-    imgUrl: "/src/assets/images/instructor/04.jpg",
-    imgAlt: "Client thumb",
-    name: "Cher Daviau",
+    imgUrl: "/src/assets/images/warshtK/abd.png",
+    imgAlt: "Abealmajeed",
+    name: "Abealmajeed",
     date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "Enthusiast build innovativ initiatives before lonterm high-impact awesome theme seo psd porta monetize covalent leadership after without resource.",
+    desc: "جودة المنتج عالية جدا",
   },
 ];
 
@@ -46,11 +47,7 @@ const Review = () => {
         <li onClick={() => setReviewShow(!reviewShow)} className="desc">
           Description
         </li>
-        <li onClick={() => setReviewShow(!reviewShow)} className="rev">
-          Reviews 4
-        </li>
       </ul>
-      
       <div
         className={`review-content ${
           reviewShow ? "review-content-show" : "description-show"
@@ -113,7 +110,7 @@ const Review = () => {
             </div>
           </div>
         </div>
-        <div className="description">
+        {/* <div className="description">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -151,7 +148,7 @@ const Review = () => {
             pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
             culpa qui officia deserunt mollit anim id est laborum.
           </p>
-        </div>
+        </div> */}
       </div>
     </>
   );
