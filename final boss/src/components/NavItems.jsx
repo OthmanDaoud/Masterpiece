@@ -74,7 +74,7 @@ const NavItems = () => {
                     className="navbar-brand"
                     style={{ maxHeight: "50px" }}
                   />
-                  <span className="ms-2 fs-4 fw-bold text-white">warshtK</span>
+                  <span className="ms-2 fs-4 fw-bold text-white">WarshtK</span>
                 </Link>
               </div>
             </div>
