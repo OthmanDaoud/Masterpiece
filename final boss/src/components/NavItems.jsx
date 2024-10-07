@@ -1,5 +1,6 @@
-import { useContext, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie"; // Import the js-cookie library
 import logo from "../assets/images/logo/logo.png";
 import { AuthContext } from "../contexts/AuthProvider";
 import { NavDropdown } from "react-bootstrap";
@@ -7,64 +8,98 @@ import { NavDropdown } from "react-bootstrap";
 const NavItems = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [socialToggle, setSocialToggle] = useState(false);
-  const [headerFiexd, setHeaderFiexd] = useState(false);
+  const [headerFixed, setHeaderFixed] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const { user, setUser } = useContext(AuthContext); // Ensure setUser is available in your context
+  const navigate = useNavigate(); // Use React Router's navigate hook for redirection
 
-  // check if user is register
-  const { user, logOut } = useContext(AuthContext);
+  // Check if the user is logged in based on cookies
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const token = Cookies.get("token");
+
+      if (token) {
+        setIsLoggedIn(true);
+        // If token exists, set user state accordingly
+        // You can fetch user data from your API here if needed
+        setUser({}); // Set user object with appropriate user data if you have it
+      } else {
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    };
+
+    checkLoginStatus();
+    // Check login status whenever the component mounts or the route changes
+    window.addEventListener("storage", checkLoginStatus);
+
+    return () => {
+      window.removeEventListener("storage", checkLoginStatus);
+    };
+  }, [setUser]);
 
   const handleLogout = () => {
-    logOut()
-      .then(() => {
-        // Sign-out successful.
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    Cookies.remove("token"); // Remove token on logout
+    setIsLoggedIn(false); // Update login status
+    setUser(null); // Reset user state on logout
+    navigate("/"); // Redirect to the homepage
+    // Trigger a custom event to force a re-check of login status
+    window.dispatchEvent(new Event("storage"));
   };
 
   window.addEventListener("scroll", () => {
     if (window.scrollY > 200) {
-      setHeaderFiexd(true);
+      setHeaderFixed(true);
     } else {
-      setHeaderFiexd(false);
+      setHeaderFixed(false);
     }
   });
 
   return (
     <header
       className={`header-section style-4 ${
-        headerFiexd ? "header-fixed fadeInUp" : ""
+        headerFixed ? "header-fixed fadeInUp" : ""
       }`}
       style={{ backgroundColor: "#06113C" }}
     >
-      {/* ------ header top: first div ----- */}
+      {/* Header Top Section for Mobile */}
       <div
         className={`header-top d-md-none ${socialToggle ? "open" : ""}`}
         style={{ color: "#ffffff" }}
       >
         <div className="container">
           <div className="header-top-area">
-            <Link
-              to="/signup"
-              className="lab-btn me-3"
-              style={{ color: "#ffffff" }}
-            >
-              <span>Create Account</span>
-            </Link>
-            <Link to="/login" style={{ color: "#ffffff" }}>
-              Log In
-            </Link>
+            {!isLoggedIn ? (
+              <>
+                <Link
+                  to="/signup"
+                  className="lab-btn me-3"
+                  style={{ color: "#ffffff" }}
+                >
+                  <span>Create Account</span>
+                </Link>
+                <Link to="/login" style={{ color: "#ffffff" }}>
+                  Log In
+                </Link>
+              </>
+            ) : (
+              <button
+                onClick={handleLogout}
+                className="lab-btn me-3"
+                style={{ backgroundColor: "#FF0000", color: "#ffffff" }}
+              >
+                Logout
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* header top ends */}
-
-      {/* ---header bottom starts */}
+      {/* Header Bottom Section */}
       <div className="header-bottom">
         <div className="container">
           <div className="header-wrapper">
-            {/* logo */}
+            {/* Logo */}
             <div className="logo-search-acte">
               <div className="logo">
                 <Link to="/">
@@ -79,7 +114,7 @@ const NavItems = () => {
               </div>
             </div>
 
-            {/* menu area */}
+            {/* Menu Area */}
             <div className="menu-area">
               <div className="menu">
                 <ul
@@ -96,7 +131,6 @@ const NavItems = () => {
                       Shop
                     </Link>
                   </li>
-
                   <li>
                     <NavLink to="/about" style={{ color: "#ffffff" }}>
                       About
@@ -110,31 +144,22 @@ const NavItems = () => {
                 </ul>
               </div>
 
-              {/* users when user available */}
-              {user ? (
+              {/* Conditional Rendering of User Options */}
+              {isLoggedIn ? (
                 <>
-                  <div>
-                    {user?.photoURL ? (
-                      <img
-                        src={user?.photoURL}
-                        className="nav-profile"
-                        alt="Profile"
-                      />
-                    ) : (
-                      <img
-                        src="/src/assets/images/author/01.jpg"
-                        className="nav-profile"
-                        alt="Profile"
-                      />
-                    )}
-                  </div>
+                  {/* Show user profile dropdown */}
                   <NavDropdown
                     id="basic-nav-dropdown"
                     className="custom-dropdown"
-                    style={{ color: "#ffffff" }}
+                    style={{
+                      color: "#ffffff",
+                      backgroundColor: "rgb(243,132,24)",
+                      borderRadius: "5px",
+                      width: "15px",
+                      textAlign: "center",
+                    }}
                   >
                     <NavDropdown.Item
-                      href="#action/3.1"
                       onClick={handleLogout}
                       className="custom-logout"
                       style={{
@@ -150,13 +175,12 @@ const NavItems = () => {
                     <NavDropdown.Item href="/cart-page">
                       Shopping Cart
                     </NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.3">
-                      Profile
-                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
                   </NavDropdown>
                 </>
               ) : (
                 <>
+                  {/* Show Sign Up and Log In buttons */}
                   <Link
                     to="/sign-up"
                     className="lab-btn me-3 d-none d-md-block"
@@ -177,7 +201,7 @@ const NavItems = () => {
                 </>
               )}
 
-              {/* menu toggle btn */}
+              {/* Menu Toggle Button for Mobile */}
               <div
                 className={`header-bar d-lg-none ${menuToggle ? "active" : ""}`}
                 onClick={() => setMenuToggle(!menuToggle)}
@@ -187,7 +211,7 @@ const NavItems = () => {
                 <span></span>
               </div>
 
-              {/* social toggler */}
+              {/* Social Toggler for Mobile */}
               <div
                 className="ellepsis-bar d-md-none"
                 onClick={() => setSocialToggle(!socialToggle)}
@@ -201,7 +225,6 @@ const NavItems = () => {
           </div>
         </div>
       </div>
-      {/* header bottom ends */}
     </header>
   );
 };

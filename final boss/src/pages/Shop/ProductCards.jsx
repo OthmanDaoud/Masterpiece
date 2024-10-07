@@ -26,9 +26,9 @@ const ProductCards = ({ products, GridList }) => {
                 <Link to={`/shop/${product.id}`}>
                   <i className="icofont-eye"></i>
                 </Link>
-                <a href="#">
+                {/* <a href="#">
                   <i className="icofont-heart"></i>
-                </a>
+                </a> */}
                 <Link to="/cart-page">
                   <i className="icofont-cart-alt"></i>
                 </Link>
@@ -67,7 +67,6 @@ const ProductCards = ({ products, GridList }) => {
                 <Rating />
               </p>
               <h6>{product.price} JD</h6>
-              <p>{product.seller}</p>
             </div>
           </div>
         </div>

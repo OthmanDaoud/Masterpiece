@@ -1,65 +1,52 @@
-/* eslint-disable react/prop-types */
-import React from 'react';
-import { createContext } from 'react';
-import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import app from '../firebase/firebase.config';
+import React, { createContext, useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
+// Create the AuthContext
 export const AuthContext = createContext();
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
 
-const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const createUser = (email, password) => {
-        setLoading(true);
-        return createUserWithEmailAndPassword(auth, email, password);
+  // Mock login function
+  const login = (email, password) => {
+    setLoading(true);
+    // Example login logic: Here you can replace with your own authentication logic
+    if (email === "test@example.com" && password === "password123") {
+      const mockUser = { name: "Sample User", email };
+      Cookies.set("user-token", "mockToken123"); // Save token to cookies
+      setUser(mockUser);
+      setLoading(false);
+      return Promise.resolve(mockUser);
+    } else {
+      setLoading(false);
+      return Promise.reject("Invalid credentials");
     }
+  };
 
-    const signUpWithGmail = () => {
-        setLoading(true);
-        return signInWithPopup(auth, googleProvider);
+  // Mock logout function
+  const logOut = () => {
+    setLoading(true);
+    Cookies.remove("user-token"); // Remove token from cookies
+    setUser(null);
+    setLoading(false);
+  };
+
+  // Check for user token in cookies on initial load
+  useEffect(() => {
+    const token = Cookies.get("user-token");
+    if (token) {
+      setUser({ name: "Sample User", email: "test@example.com" }); // Replace with real user fetching logic
     }
+    setLoading(false);
+  }, []);
 
-    const login = (email, password) =>{
-        setLoading(true);
-        return signInWithEmailAndPassword(auth, email, password);
-    }
+  // AuthContext values to pass to consumers
+  const authInfo = { user, setUser, loading, login, logOut };
 
-    const logOut = () =>{
-        localStorage.removeItem('genius-token');
-        return signOut(auth);
-    }
-
-    useEffect( () =>{
-        const unsubscribe = onAuthStateChanged(auth, currentUser =>{
-            // console.log(currentUser);
-            setUser(currentUser);
-            setLoading(false);
-        });
-
-        return () =>{
-            return unsubscribe();
-        }
-    }, [])
-
-    const authInfo = {
-        user, 
-        loading,
-        createUser, 
-        login, 
-        logOut,
-        signUpWithGmail
-    }
-
-    return (
-        <AuthContext.Provider value={authInfo}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;
