@@ -1,99 +1,88 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PageHeader from "../../components/PageHeader";
-import { Component, Fragment, useState } from "react";
 import Search from "./Search";
 import Pagination from "./Pagination";
 import ShopCategory from "./ShopCategory";
 import PopularPost from "./PopularPost";
-import Tags from "./Tags";
 import ProductCards from "./ProductCards";
-const showResult = "Showing 01 - 12 of 139 Results";
-import Data from "/src/products.json";
+import axios from "axios"; // Import axios for data fetching
 
 const Shop = () => {
-  const [GridList, setGridList] = useState(true);
-  const [products, setProducts] = useState(Data);
-
-  //   category active colors
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
-  // pagination
-  // Get current products to display
+  const [GridList, setGridList] = useState(true); // State to control grid/list view
+  const [products, setProducts] = useState([]);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 12; // Number of products per page
+  const productsPerPage = 12;
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/products/allProducts?page=${currentPage}&limit=${productsPerPage}&category=${selectedCategory}`
+        );
+        setProducts(response.data.products);
+        setTotalProducts(response.data.totalProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProducts();
+  }, [currentPage, selectedCategory]);
 
-  // Function to change the current page
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // category based filtering
-  const menuItems = [...new Set(Data.map((Val) => Val.category))];
-
-  const filterItem = (curcat) => {
-    const newItem = Data.filter((newVal) => {
-      return newVal.category === curcat;
-    });
-    setSelectedCategory(curcat);
-    setProducts(newItem);
-    // console.log(selectedCategory)
+  const handleCategoryChange = (newCategory) => {
+    setSelectedCategory(newCategory);
+    setCurrentPage(1); // Reset to first page when category changes
   };
 
   return (
     <div>
       <PageHeader title={"Our Shop Pages"} curPage={"Shop"} />
 
-      {/* shop page */}
       <div className="shop-page padding-tb">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-8 col-12">
               <article>
                 <div className="shop-title d-flex flex-wrap justify-content-between">
-                  <p>{showResult}</p>
-                  <div
-                    className={`product-view-mode ${
-                      GridList ? "gridActive" : "listActive"
-                    }`}
-                  >
-                    <a className="grid" onClick={() => setGridList(!GridList)}>
+                  <div className="product-view-mode">
+                    <a
+                      className={`grid ${GridList ? "gridActive" : ""}`}
+                      onClick={() => setGridList(true)}
+                    >
                       <i className="icofont-ghost"></i>
                     </a>
-                    <a className="list" onClick={() => setGridList(!GridList)}>
+                    <a
+                      className={`list ${!GridList ? "listActive" : ""}`}
+                      onClick={() => setGridList(false)}
+                    >
                       <i className="icofont-listine-dots"></i>
                     </a>
                   </div>
                 </div>
                 <div>
+                  {/* Pass the fetched products and category as props to ProductCards */}
                   <ProductCards
-                    products={currentProducts}
+                    products={products}
                     GridList={GridList}
+                    totalProducts={totalProducts}
+                    currentPage={currentPage}
+                    productsPerPage={productsPerPage}
+                    paginate={paginate}
                   />
                 </div>
-                <Pagination
-                  productsPerPage={productsPerPage}
-                  totalProducts={products.length}
-                  paginate={paginate}
-                  activePage={currentPage}
-                />
               </article>
             </div>
             <div className="col-lg-4 col-12">
               <aside>
                 <Search products={products} GridList={GridList} />
-                {/* <ShopCategory /> */}
+                {/* Use handleCategoryChange for the ShopCategory filter */}
                 <ShopCategory
-                  filterItem={filterItem}
-                  setItem={setProducts}
-                  menuItems={menuItems}
-                  setProducts={setProducts}
+                  filterItem={handleCategoryChange}
                   selectedCategory={selectedCategory}
                 />
                 <PopularPost />

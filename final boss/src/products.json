@@ -1,6 +1,5 @@
 [
   {
-    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
     "category": "Construction",
     "name": "Heavy Duty Cement",
     "seller": "CementCo",
@@ -13,7 +12,6 @@
     "quantity": 0
   },
   {
-    "id": "b2c3d4e5-f678-9012-abcd-ef2345678901",
     "category": "Electrical",
     "name": "LED Light Bulb",
     "seller": "BrightLights",
@@ -26,7 +24,6 @@
     "quantity": 0
   },
   {
-    "id": "c3d4e5f6-7890-1234-abcd-ef3456789012",
     "category": "Paint",
     "name": "Acrylic Paint 1L",
     "seller": "PaintMasters",
@@ -39,7 +36,6 @@
     "quantity": 0
   },
   {
-    "id": "d4e5f678-9012-3456-abcd-ef4567890123",
     "category": "Wood",
     "name": "Oak Wood Planks",
     "seller": "WoodWorks",
@@ -52,7 +48,6 @@
     "quantity": 0
   },
   {
-    "id": "e5f67890-1234-5678-abcd-ef5678901234",
     "category": "Steel",
     "name": "Stainless Steel Rods",
     "seller": "SteelForge",
@@ -65,7 +60,6 @@
     "quantity": 0
   },
   {
-    "id": "f6789012-3456-7890-abcd-ef6789012345",
     "category": "Pumps",
     "name": "Electric Water Pump",
     "seller": "PumpPro",
@@ -78,7 +72,6 @@
     "quantity": 0
   },
   {
-    "id": "g7890123-4567-8901-abcd-ef7890123456",
     "category": "Construction",
     "name": "Quick Dry Cement",
     "seller": "CementCo",
@@ -91,7 +84,6 @@
     "quantity": 0
   },
   {
-    "id": "h8901234-5678-9012-abcd-ef8901234567",
     "category": "Electrical",
     "name": "Smart Power Strip",
     "seller": "ElectroHub",
@@ -104,7 +96,6 @@
     "quantity": 0
   },
   {
-    "id": "i9012345-6789-0123-abcd-ef9012345678",
     "category": "Paint",
     "name": "Glossy Finish Paint 2L",
     "seller": "ColorSplash",
@@ -117,7 +108,6 @@
     "quantity": 0
   },
   {
-    "id": "j0123456-7890-1234-abcd-ef0123456789",
     "category": "Wood",
     "name": "Pine Wood Boards",
     "seller": "WoodWorks",
@@ -130,7 +120,6 @@
     "quantity": 0
   },
   {
-    "id": "k1234567-8901-2345-abcd-ef1234567890",
     "category": "Steel",
     "name": "Galvanized Steel Sheets",
     "seller": "SteelForge",
@@ -143,7 +132,6 @@
     "quantity": 0
   },
   {
-    "id": "l2345678-9012-3456-abcd-ef2345678901",
     "category": "Pumps",
     "name": "Submersible Pump",
     "seller": "PumpPro",
@@ -156,7 +144,6 @@
     "quantity": 0
   },
   {
-    "id": "m3456789-0123-4567-abcd-ef3456789012",
     "category": "Construction",
     "name": "Portland Cement",
     "seller": "CementCo",
@@ -169,7 +156,6 @@
     "quantity": 0
   },
   {
-    "id": "n4567890-1234-5678-abcd-ef4567890123",
     "category": "Electrical",
     "name": "Ceiling Fan",
     "seller": "HomeComfort",
@@ -182,7 +168,6 @@
     "quantity": 0
   },
   {
-    "id": "o5678901-2345-6789-abcd-ef5678901234",
     "category": "Paint",
     "name": "Matte Finish Paint 5L",
     "seller": "ColorSplash",
@@ -195,7 +180,6 @@
     "quantity": 0
   },
   {
-    "id": "p6789012-3456-7890-abcd-ef6789012345",
     "category": "Wood",
     "name": "Maple Wood Panels",
     "seller": "WoodWorks",
@@ -208,7 +192,6 @@
     "quantity": 0
   },
   {
-    "id": "q7890123-4567-8901-abcd-ef7890123456",
     "category": "Steel",
     "name": "Steel Beams",
     "seller": "SteelForge",
@@ -221,7 +204,6 @@
     "quantity": 0
   },
   {
-    "id": "r8901234-5678-9012-abcd-ef8901234567",
     "category": "Pumps",
     "name": "Hydraulic Pump",
     "seller": "PumpPro",
@@ -234,7 +216,6 @@
     "quantity": 0
   },
   {
-    "id": "s9012345-6789-0123-abcd-ef9012345678",
     "category": "Construction",
     "name": "Mortar Mix",
     "seller": "CementCo",
@@ -247,7 +228,6 @@
     "quantity": 0
   },
   {
-    "id": "t0123456-7890-1234-abcd-ef0123456789",
     "category": "Electrical",
     "name": "Smart Thermostat",
     "seller": "HomeTech",
@@ -260,7 +240,6 @@
     "quantity": 0
   },
   {
-    "id": "u1234567-8901-2345-abcd-ef1234567890",
     "category": "Paint",
     "name": "Spray Paint Set",
     "seller": "ColorSplash",
@@ -273,7 +252,6 @@
     "quantity": 0
   },
   {
-    "id": "v2345678-9012-3456-abcd-ef2345678901",
     "category": "Wood",
     "name": "Cherry Wood Planks",
     "seller": "WoodWorks",
@@ -286,7 +264,6 @@
     "quantity": 0
   },
   {
-    "id": "w3456789-0123-4567-abcd-ef3456789012",
     "category": "Steel",
     "name": "Steel Pipes",
     "seller": "SteelForge",
@@ -299,7 +276,6 @@
     "quantity": 0
   },
   {
-    "id": "x4567890-1234-5678-abcd-ef4567890123",
     "category": "Pumps",
     "name": "Oil Pump",
     "seller": "PumpPro",
@@ -312,7 +288,6 @@
     "quantity": 0
   },
   {
-    "id": "y5678901-2345-6789-abcd-ef5678901234",
     "category": "Construction",
     "name": "Concrete Blocks",
     "seller": "CementCo",
@@ -325,7 +300,6 @@
     "quantity": 0
   },
   {
-    "id": "z6789012-3456-7890-abcd-ef6789012345",
     "category": "Electrical",
     "name": "Solar Panel",
     "seller": "EcoPower",
@@ -338,7 +312,6 @@
     "quantity": 0
   },
   {
-    "id": "a7890123-4567-8901-abcd-ef7890123456",
     "category": "Paint",
     "name": "Exterior Paint 4L",
     "seller": "ColorSplash",
@@ -351,7 +324,6 @@
     "quantity": 0
   },
   {
-    "id": "b8901234-5678-9012-abcd-ef8901234567",
     "category": "Wood",
     "name": "Teak Wood Boards",
     "seller": "WoodWorks",
@@ -364,7 +336,6 @@
     "quantity": 0
   },
   {
-    "id": "c9012345-6789-0123-abcd-ef9012345678",
     "category": "Steel",
     "name": "Steel Rods",
     "seller": "SteelForge",
@@ -377,7 +348,6 @@
     "quantity": 0
   },
   {
-    "id": "d0123456-7890-1234-abcd-ef0123456789",
     "category": "Pumps",
     "name": "Air Pump",
     "seller": "PumpPro",
@@ -390,7 +360,6 @@
     "quantity": 0
   },
   {
-    "id": "e1234567-8901-2345-abcd-ef1234567890",
     "category": "Construction",
     "name": "Brick Mortar",
     "seller": "CementCo",
@@ -403,7 +372,6 @@
     "quantity": 0
   },
   {
-    "id": "f2345678-9012-3456-abcd-ef2345678901",
     "category": "Electrical",
     "name": "Portable Generator",
     "seller": "PowerGen",
@@ -416,7 +384,6 @@
     "quantity": 0
   },
   {
-    "id": "g3456789-0123-4567-abcd-ef3456789012",
     "category": "Paint",
     "name": "Waterproof Paint 3L",
     "seller": "ColorSplash",
@@ -429,7 +396,6 @@
     "quantity": 0
   },
   {
-    "id": "h4567890-1234-5678-abcd-ef4567890123",
     "category": "Wood",
     "name": "Bamboo Wood Sheets",
     "seller": "WoodWorks",
@@ -442,7 +408,6 @@
     "quantity": 0
   },
   {
-    "id": "i5678901-2345-6789-abcd-ef5678901234",
     "category": "Steel",
     "name": "Steel Angles",
     "seller": "SteelForge",
@@ -455,7 +420,6 @@
     "quantity": 0
   },
   {
-    "id": "j6789012-3456-7890-abcd-ef6789012345",
     "category": "Pumps",
     "name": "Garden Pump",
     "seller": "PumpPro",
@@ -468,7 +432,6 @@
     "quantity": 0
   },
   {
-    "id": "k7890123-4567-8901-abcd-ef7890123456",
     "category": "Construction",
     "name": "Plaster Mix",
     "seller": "CementCo",
@@ -481,7 +444,6 @@
     "quantity": 0
   },
   {
-    "id": "l8901234-5678-9012-abcd-ef8901234567",
     "category": "Electrical",
     "name": "Smart Light Switch",
     "seller": "SmartHome",
@@ -494,7 +456,6 @@
     "quantity": 0
   },
   {
-    "id": "m9012345-6789-0123-abcd-ef9012345678",
     "category": "Paint",
     "name": "Primer Paint 1L",
     "seller": "ColorSplash",
@@ -507,7 +468,6 @@
     "quantity": 0
   },
   {
-    "id": "n0123456-7890-1234-abcd-ef0123456789",
     "category": "Wood",
     "name": "Walnut Wood Slabs",
     "seller": "WoodWorks",
@@ -520,7 +480,6 @@
     "quantity": 0
   },
   {
-    "id": "o1234567-8901-2345-abcd-ef1234567890",
     "category": "Steel",
     "name": "Steel Plates",
     "seller": "SteelForge",
@@ -533,7 +492,6 @@
     "quantity": 0
   },
   {
-    "id": "p2345678-9012-3456-abcd-ef2345678901",
     "category": "Pumps",
     "name": "Pressure Pump",
     "seller": "PumpPro",
@@ -546,7 +504,6 @@
     "quantity": 0
   },
   {
-    "id": "q3456789-0123-4567-abcd-ef3456789012",
     "category": "Construction",
     "name": "Drywall Sheets",
     "seller": "CementCo",
@@ -559,7 +516,6 @@
     "quantity": 0
   },
   {
-    "id": "r4567890-1234-5678-abcd-ef4567890123",
     "category": "Electrical",
     "name": "Rechargeable Battery",
     "seller": "BatteryMax",
@@ -572,7 +528,6 @@
     "quantity": 0
   },
   {
-    "id": "s5678901-2345-6789-abcd-ef5678901234",
     "category": "Paint",
     "name": "Interior Paint 5L",
     "seller": "ColorSplash",
@@ -585,7 +540,6 @@
     "quantity": 0
   },
   {
-    "id": "t6789012-3456-7890-abcd-ef6789012345",
     "category": "Wood",
     "name": "Oak Wood Slats",
     "seller": "WoodWorks",
@@ -598,7 +552,6 @@
     "quantity": 0
   },
   {
-    "id": "u7890123-4567-8901-abcd-ef7890123456",
     "category": "Steel",
     "name": "Steel Rebars",
     "seller": "SteelForge",
@@ -611,7 +564,6 @@
     "quantity": 0
   },
   {
-    "id": "v8901234-5678-9012-abcd-ef8901234567",
     "category": "Pumps",
     "name": "Fuel Pump",
     "seller": "PumpPro",
@@ -624,7 +576,6 @@
     "quantity": 0
   },
   {
-    "id": "w9012345-6789-0123-abcd-ef9012345678",
     "category": "Construction",
     "name": "Screws and Nails",
     "seller": "CementCo",
@@ -637,7 +588,6 @@
     "quantity": 0
   },
   {
-    "id": "x0123456-7890-1234-abcd-ef0123456789",
     "category": "Electrical",
     "name": "LED Bulbs Pack",
     "seller": "BrightLights",

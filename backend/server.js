@@ -5,6 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const app = express();
 const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 const corsOptions = {
   origin: "http://localhost:5173", // Your frontend origin
@@ -24,6 +25,7 @@ connectDB();
 // Routes
 
 app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`Server running on port ${port}`));

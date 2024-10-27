@@ -3,29 +3,41 @@ import { useParams } from "react-router-dom";
 import PageHeader from "../../components/PageHeader";
 import PopularPost from "./PopularPost";
 import Tags from "./Tags";
-import Rating from "../../components/Sidebar/rating";
+import Rating from "../../components/Sidebar/Rating";
+import axios from "axios"; // Import axios for making API calls
 
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
 
-// import required modules
+// Import required modules
 import { Autoplay } from "swiper/modules";
 import Review from "../../components/Review";
 import MostPopularPost from "../../components/Sidebar/MostPopularPost";
 import ProductDisplay from "./ProductDisplay";
-const reviwtitle = "Add a Review";
 
 const SingleProduct = () => {
-  const [product, setProduct] = useState([]);
-  const { id } = useParams();
-  useEffect(() => {
-    fetch("/src/products.json")
-      .then((res) => res.json())
-      .then((data) => setProduct(data));
-  }, []);
+  const [product, setProduct] = useState(null); // Update the state to store a single product
+  const { id } = useParams(); // Get the product ID from URL parameters
 
-  const result = product.filter((p) => p.id === id);
+  // Fetch product data based on the ID
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        // Make a request to your backend API to fetch the single product
+        const response = await axios.get(
+          `http://localhost:3000/api/products/${id}`
+        );
+        setProduct(response.data);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  if (!product) return <div>Loading...</div>; // Show loading state while data is being fetched
+
   return (
     <div>
       <PageHeader title={"OUR SHOP SINGLE"} curPage={"Shop / Single Product"} />
@@ -53,13 +65,11 @@ const SingleProduct = () => {
                               nextEl: ".pro-single-next",
                             }}
                           >
-                            {result.map((item, i) => (
-                              <SwiperSlide key={i}>
-                                <div className="single-thumb">
-                                  <img src={item.img} alt="" />
-                                </div>
-                              </SwiperSlide>
-                            ))}
+                            <SwiperSlide key={product._id}>
+                              <div className="single-thumb">
+                                <img src={product.img} alt="" />
+                              </div>
+                            </SwiperSlide>
                           </Swiper>
                           <div className="pro-single-next">
                             <i className="icofont-rounded-left"></i>
@@ -72,11 +82,7 @@ const SingleProduct = () => {
                     </div>
                     <div className="col-md-6 col-12">
                       <div className="post-content">
-                        <div>
-                          {result.map((item) => (
-                            <ProductDisplay item={item} key={item.id} />
-                          ))}
-                        </div>
+                        <ProductDisplay item={product} key={product._id} />
                       </div>
                     </div>
                   </div>

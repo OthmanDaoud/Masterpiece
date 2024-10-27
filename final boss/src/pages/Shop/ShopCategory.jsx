@@ -1,46 +1,35 @@
-/* eslint-disable react/prop-types */
-const title = "All Categories";
-import Data from "/src/products.json";
+import React from "react";
 
-const ShopCategory = ({
-  filterItem,
-  setProducts,
-  menuItems,
-  selectedCategory,
-  setSelectedCategory,
-}) => {
+const title = "All Categories";
+
+// Define categories for filtering
+const categories = [
+  "All",
+  "Construction",
+  "Electrical",
+  "Paint",
+  "Wood",
+  "Steel",
+  "Pumps",
+];
+
+const ShopCategory = ({ filterItem, selectedCategory }) => {
   return (
     <>
       <div className="widget-header">
         <h5 className="ms-2">{title}</h5>
       </div>
 
-      {/* Button for All Categories */}
-      <button
-        className={`m-2 ${selectedCategory === "All" ? "bg-warning" : ""}`}
-        onClick={() => {
-          setProducts(Data); // Show all products
-          setSelectedCategory("All"); // Set "All" as the selected category
-        }}
-      >
-        All
-      </button>
-
-      {/* Render buttons for other categories */}
-      {menuItems.map((Val, id) => {
-        return (
-          <button
-            className={`m-2 ${selectedCategory === Val ? "bg-warning" : ""}`}
-            onClick={() => {
-              filterItem(Val); // Filter products based on the selected category
-              setSelectedCategory(Val); // Set the clicked category as the selected one
-            }}
-            key={id}
-          >
-            {Val}
-          </button>
-        );
-      })}
+      {/* Render buttons for each category */}
+      {categories.map((category, index) => (
+        <button
+          key={index}
+          className={`m-2 ${selectedCategory === category ? "bg-warning" : ""}`}
+          onClick={() => filterItem(category === "All" ? "" : category)}
+        >
+          {category}
+        </button>
+      ))}
     </>
   );
 };
