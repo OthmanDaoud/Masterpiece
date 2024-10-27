@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
+const feedBackRoutes = require("./routes/feedBackRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 const corsOptions = {
   origin: "http://localhost:5173", // Your frontend origin
@@ -26,6 +28,8 @@ connectDB();
 
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/feedback", feedBackRoutes);
+app.use("/api/orders", orderRoutes);
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`Server running on port ${port}`));

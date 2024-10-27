@@ -5,7 +5,8 @@ const desc =
   "Energistia an deliver atactica metrcs after avsionary Apropria trnsition enterpris an sources applications emerging 	psd template.";
 
 const ProductDisplay = ({ item }) => {
-  const { id, img, price, name, quantity, seller } = item;
+  const { _id: id, img, price, name, quantity, seller } = item;
+  console.log("item: ", item);
   const [prequantity, setQuantity] = useState(quantity);
   const [coupon, setCoupon] = useState("");
   const [size, setSize] = useState("Select Size");
@@ -43,6 +44,7 @@ const ProductDisplay = ({ item }) => {
       color: color,
       coupon: coupon,
     };
+    console.log("Product: ", product);
 
     // Retrieve existing cart items from local storage or initialize an empty array
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];

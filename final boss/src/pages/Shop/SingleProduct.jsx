@@ -1,42 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PageHeader from "../../components/PageHeader";
-import PopularPost from "./PopularPost";
-import Tags from "./Tags";
-import Rating from "../../components/Sidebar/Rating";
-import axios from "axios"; // Import axios for making API calls
-
+import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
-// Import Swiper styles
 import "swiper/css";
-
-// Import required modules
 import { Autoplay } from "swiper/modules";
 import Review from "../../components/Review";
 import MostPopularPost from "../../components/Sidebar/MostPopularPost";
 import ProductDisplay from "./ProductDisplay";
 
 const SingleProduct = () => {
-  const [product, setProduct] = useState(null); // Update the state to store a single product
-  const { id } = useParams(); // Get the product ID from URL parameters
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { id } = useParams();
 
-  // Fetch product data based on the ID
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        // Make a request to your backend API to fetch the single product
+        setLoading(true);
         const response = await axios.get(
           `http://localhost:3000/api/products/${id}`
         );
         setProduct(response.data);
-      } catch (error) {
-        console.error("Error fetching product:", error);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching product:", err);
+        setError("Failed to load product details");
+      } finally {
+        setLoading(false);
       }
     };
-    fetchProduct();
+
+    if (id) {
+      fetchProduct();
+    }
   }, [id]);
 
-  if (!product) return <div>Loading...</div>; // Show loading state while data is being fetched
+  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if (error) return <div className="error-message">{error}</div>;
+  if (!product) return <div className="not-found">Product not found</div>;
 
   return (
     <div>
@@ -54,7 +57,7 @@ const SingleProduct = () => {
                           <Swiper
                             spaceBetween={30}
                             slidesPerView={1}
-                            loop={"true"}
+                            loop={true}
                             autoplay={{
                               delay: 2000,
                               disableOnInteraction: false,
@@ -67,7 +70,7 @@ const SingleProduct = () => {
                           >
                             <SwiperSlide key={product._id}>
                               <div className="single-thumb">
-                                <img src={product.img} alt="" />
+                                <img src={product.img} alt={product.name} />
                               </div>
                             </SwiperSlide>
                           </Swiper>
@@ -82,14 +85,18 @@ const SingleProduct = () => {
                     </div>
                     <div className="col-md-6 col-12">
                       <div className="post-content">
-                        <ProductDisplay item={product} key={product._id} />
+                        <ProductDisplay item={product} />
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="review">
-                  <Review />
+                  <Review
+                    productId={id}
+                    initialRating={product.ratings}
+                    initialRatingsCount={product.ratingsCount}
+                  />
                 </div>
               </article>
             </div>

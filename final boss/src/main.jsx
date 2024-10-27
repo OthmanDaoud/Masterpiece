@@ -1,18 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import App from "./App.jsx";
 import "./index.css";
 import "swiper/css";
-
 // bootstrap css
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
-
 // fonts and icons
 import "././assets/css/icofont.min.css";
 import "././assets/css/animate.css";
 import "././assets/css/style.min.css";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home/Home.jsx";
 import Shop from "./pages/Shop/Shop.jsx";
@@ -29,6 +27,7 @@ import ErrorPage from "./components/ErrorPage.jsx";
 import PrivateRoute from "./PrivateRoute/PrivateRoute.jsx";
 import AuthProvider from "./contexts/AuthProvider.jsx";
 import UserProfile from "./components/UserProfile.jsx";
+import OrderConfirmation from "./pages/Shop/OrderConfirmation.jsx"; // New component for order confirmation
 
 const router = createBrowserRouter([
   {
@@ -76,6 +75,22 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "/check-out",
+        element: (
+          <PrivateRoute>
+            <CheckoutPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/order-confirmation/:orderId",
+        element: (
+          <PrivateRoute>
+            <OrderConfirmation />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
@@ -86,14 +101,20 @@ const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
-  {
-    path: "/check-out",
-    element: <CheckoutPage />,
-  },
 ]);
+
+// Create PayPal options
+const paypalOptions = {
+  "client-id":
+    "AXSHzO_ufOdxM-ouhu0UJ_8xAsr5RnrYC09jLAs5YTnLe97HTxEWyy7jXJ-Qm5Qh-Yid6GNCWX9DX807", // Store this in your .env file
+  currency: "USD",
+  intent: "capture",
+};
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AuthProvider>
-    <RouterProvider router={router} />
+    <PayPalScriptProvider options={paypalOptions}>
+      <RouterProvider router={router} />
+    </PayPalScriptProvider>
   </AuthProvider>
 );

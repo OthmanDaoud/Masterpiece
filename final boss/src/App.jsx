@@ -8,7 +8,7 @@ function App() {
     <>
       <NavItems />
       <div className="min-vh-100">
-      <Outlet />
+        <Outlet />
       </div>
       <Footer />
     </>

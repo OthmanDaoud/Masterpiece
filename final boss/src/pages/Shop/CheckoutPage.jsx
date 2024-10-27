@@ -1,231 +1,190 @@
 import React, { useState } from "react";
-import "../../components/modal.css";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { PayPalButton } from "react-paypal-button-v2";
+import { MdDownload } from "react-icons/md"; // Download icon
+import jsPDF from "jspdf";
 
-const CheckoutPage = () => {
-  const [show, setShow] = useState(false);
-  const [activeTab, setActiveTab] = useState("visa"); // Initial active tab
+const Checkout = (cartItems) => {
+  const [loading, setLoading] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [pdfDoc, setPdfDoc] = useState(null);
+  const navigate = useNavigate();
+  const products = cartItems.cartItems;
+  const totalAmount = cartItems.totalPrice;
 
-  const handleTabChange = (tabId) => {
-    setActiveTab(tabId);
+  const generatePDF = (orderDetails) => {
+    console.log("orderDetails", orderDetails);
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Order Receipt", 10, 10);
+    doc.setFontSize(12);
+    doc.text(`Order ID: ${orderDetails.orderId}`, 10, 30);
+    doc.text(`Order Date: ${new Date().toLocaleDateString()}`, 10, 40);
+    doc.text(`Total Price: $${orderDetails.totalAmount.toFixed(2)}`, 10, 50);
+    doc.text("Products:", 10, 60);
+
+    orderDetails.products.forEach((product, index) => {
+      doc.text(
+        `${index + 1}. ${product.name} - Quantity: ${product.quantity}`,
+        10,
+        70 + index * 10
+      );
+    });
+
+    doc.text(
+      "The order will take 2 days of work. We will contact you as soon as possible.",
+      10,
+      90 + orderDetails.products.length * 10
+    );
+
+    return doc;
   };
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleDownloadPDF = () => {
+    if (pdfDoc) {
+      pdfDoc.save("order_receipt.pdf");
+    }
+  };
 
-  // order confirmation and redirect to home page
-  const location = useLocation();
-  const navigate = useNavigate();
+  const handlePaymentSuccess = async (details, data) => {
+    setLoading(true);
+    try {
+      const orderData = {
+        products: products.map((p) => ({
+          product: p.id,
+          quantity: p.quantity,
+        })),
+        totalAmount,
+        paymentStatus: "Pending",
+        paypalPaymentId: data.paymentID,
+        paypalOrderId: data.orderID,
+      };
+      const response = await axios.post(
+        "http://localhost:3000/api/orders/create",
+        orderData,
+        { withCredentials: true }
+      );
+      const orderId = response.data._id;
 
-  const from = location.state?.from?.pathname || "/";
+      // Generate PDF and store it in state
+      const orderDetails = {
+        orderId,
+        totalAmount,
+        products,
+      };
+      const doc = generatePDF(orderDetails);
+      setPdfDoc(doc);
+      setPaymentSuccess(true);
+      console.log("Order created successfully:", response.data);
 
-  const handleOrderConfirm = () => {
-      alert("Your order placed successfully!")
-      localStorage.removeItem("cart");
-      navigate(from, { replace: true });
-  }
+      // Remove cart items from local storage
+      localStorage.removeItem("cart"); // Ensure this matches the key you used to store the cart
+
+      // Automatically navigate to "/shop" after 15 seconds
+      setTimeout(() => {
+        navigate("/shop");
+      }, 15000);
+    } catch (error) {
+      console.error("Error creating order:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="modalCard">
-      <Button variant="primary" onClick={handleShow} className="py-2">
-        Proceed to Checkout
-      </Button>
+    <div className="container mt-5">
+      <div className="card">
+        <div className="card-body">
+          <h2 className="card-title text-center">Checkout</h2>
 
-      <Modal
-        show={show}
-        onHide={handleClose}
-        animation={false}
-        className="modal fade"
-        centered
-      >
-        <div className="modal-dialog">
-          <h5 className="px-3 mb-3">Select Your Payment Method</h5>
-          <div className="modal-content">
-            <div className="modal-body">
-              <div className="tabs mt-3">
-                <ul className="nav nav-tabs" id="myTab" role="tablist">
-                  <li className="nav-item" role="presentation">
-                    <a
-                      className={`nav-link ${
-                        activeTab === "visa" ? "active" : ""
-                      }`}
-                      id="visa-tab"
-                      data-toggle="tab"
-                      href="#visa"
-                      role="tab"
-                      aria-controls="visa"
-                      aria-selected={activeTab === "visa"}
-                      onClick={() => handleTabChange("visa")}
-                    >
-                      <img src="https://i.imgur.com/sB4jftM.png" width="80" />
-                    </a>
-                  </li>
-                  <li className="nav-item" role="presentation">
-                    <a
-                      className={`nav-link ${
-                        activeTab === "paypal" ? "active" : ""
-                      }`}
-                      id="paypal-tab"
-                      data-toggle="tab"
-                      href="#paypal"
-                      role="tab"
-                      aria-controls="paypal"
-                      aria-selected={activeTab === "paypal"}
-                      onClick={() => handleTabChange("paypal")}
-                    >
-                      <img src="https://i.imgur.com/yK7EDD1.png" width="80" />
-                    </a>
-                  </li>
-                </ul>
-                <div className="tab-content" id="myTabContent">
-                  {/* visa content */}
-                  <div
-                    className={`tab-pane fade ${
-                      activeTab === "visa" ? "show active" : ""
-                    }`}
-                    id="visa"
-                    role="tabpanel"
-                    aria-labelledby="visa-tab"
-                  >
-                    {/* Visa tab content */}
-                    <div className="mt-4 mx-4">
-                      <div className="text-center">
-                        <h5>Credit card</h5>
-                      </div>
-                      <div className="form mt-3">
-                        <div className="inputbox">
-                          <input
-                            type="text"
-                            name="name"
-                            className="form-control"
-                            required="required"
-                          />
-                          <span>Cardholder Name</span>
-                        </div>
-                        <div className="inputbox">
-                          <input
-                            type="text"
-                            name="name"
-                            min="1"
-                            max="999"
-                            className="form-control"
-                            required="required"
-                          />
-                          <span>Card Number</span> <i className="fa fa-eye"></i>
-                        </div>
-                        <div className="d-flex flex-row">
-                          <div className="inputbox">
-                            <input
-                              type="text"
-                              name="name"
-                              min="1"
-                              max="999"
-                              className="form-control"
-                              required="required"
-                            />
-                            <span>Expiration Date</span>
-                          </div>
-                          <div className="inputbox">
-                            <input
-                              type="text"
-                              name="name"
-                              min="1"
-                              max="999"
-                              className="form-control"
-                              required="required"
-                            />
-                            <span>CVV</span>
-                          </div>
-                        </div>
-                        <div className="px-5 pay">
-                          <button className="btn btn-success btn-block" onClick={handleOrderConfirm}>
-                            Add card
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* paypal content */}
-                  <div
-                    className={`tab-pane fade ${
-                      activeTab === "paypal" ? "show active" : ""
-                    }`}
-                    id="paypal"
-                    role="tabpanel"
-                    aria-labelledby="paypal-tab"
-                  >
-                    {/* Paypal tab content */}
-                    <div className="mx-4 mt-4">
-                      <div className="text-center">
-                        <h5>Paypal Account Info</h5>
-                      </div>
-                      <div className="form mt-3">
-                        <div className="inputbox">
-                          <input
-                            type="text"
-                            name="name"
-                            className="form-control"
-                            required="required"
-                          />
-                          <span>Enter your email</span>
-                        </div>
-                        <div className="inputbox">
-                          <input
-                            type="text"
-                            name="name"
-                            min="1"
-                            max="999"
-                            className="form-control"
-                            required="required"
-                          />
-                          <span>Your Name</span>
-                        </div>
-                        <div className="d-flex flex-row">
-                          <div className="inputbox">
-                            <input
-                              type="text"
-                              name="name"
-                              min="1"
-                              max="999"
-                              className="form-control"
-                              required="required"
-                            />
-                            <span>Extra Info</span>
-                          </div>
-                          <div className="inputbox">
-                            <input
-                              type="text"
-                              name="name"
-                              min="1"
-                              max="999"
-                              className="form-control"
-                              required="required"
-                            />
-                            <span></span>
-                          </div>
-                        </div>
-                        <div className="pay px-5">
-                          <button className="btn btn-primary btn-block" onClick={handleOrderConfirm}>
-                            Add paypal
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+          {paymentSuccess ? (
+            <div className="text-center">
+              <div className="mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-16 w-16 text-success"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <p className="h5 text-success">Payment Successful!</p>
+              <p className="small mt-2">
+                Thank you for your purchase. You will be redirected to the shop
+                shortly.
+              </p>
+              <div className="card mt-4 shadow">
+                <div className="card-body text-center">
+                  <h5 className="card-title">Download Receipt</h5>
+                  <p className="card-text">
+                    Click the icon below to download your order receipt.
+                  </p>
+                  <MdDownload
+                    size={48}
+                    style={{ cursor: "pointer", color: "#28a745" }} // Change color as needed
+                    onClick={handleDownloadPDF}
+                  />
                 </div>
               </div>
-              {/* payment desclaimer */}
-              <p className="mt-3 px-4 p-Disclaimer">
-              <em>Payment Disclaimer:</em> In no event shall payment or partial payment by Owner for any material or service
-              </p>
             </div>
-          </div>
+          ) : (
+            <>
+              <div className="border p-3 rounded mb-4">
+                <h4 className="h6 font-weight-bold">Order Summary</h4>
+                <ul className="list-group mb-2">
+                  {products.map((product, index) => (
+                    <li
+                      key={index}
+                      className="list-group-item d-flex justify-content-between"
+                    >
+                      <span>{product.name}</span>
+                      <span>x{product.quantity}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="h5 font-weight-bold">
+                  Total Amount: ${totalAmount.toFixed(2)}
+                </div>
+                <small className="text-muted">
+                  Your total amount includes taxes and shipping.
+                </small>
+              </div>
+
+              {loading && (
+                <div className="progress mb-4">
+                  <div
+                    className="progress-bar progress-bar-striped progress-bar-animated"
+                    style={{ width: "75%" }}
+                  ></div>
+                </div>
+              )}
+
+              <div className="bg-light p-3 rounded">
+                <h4 className="h6 font-weight-bold">Payment Method</h4>
+                <p>Please complete your payment through PayPal.</p>
+                <PayPalButton
+                  amount={totalAmount}
+                  onSuccess={handlePaymentSuccess}
+                  options={{
+                    clientId:
+                      "AXSHzO_ufOdxM-ouhu0UJ_8xAsr5RnrYC09jLAs5YTnLe97HTxEWyy7jXJ-Qm5Qh-Yid6GNCWX9DX807",
+                  }}
+                />
+              </div>
+            </>
+          )}
         </div>
-      </Modal>
+      </div>
     </div>
   );
 };
 
-export default CheckoutPage;
+export default Checkout;

@@ -1,157 +1,256 @@
-import React, { useState } from "react";
-import Rating from "../components/Sidebar/Rating";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
-const reviwtitle = "Add a Review";
-let ReviewList = [
-  {
-    imgUrl:
-      "https://scontent.famm7-1.fna.fbcdn.net/v/t39.30808-6/434472502_2942113115942513_1397923943338398724_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFpJNkD_lL2ih0TTXHdOm6U1Uzqv6dkeV7VTOq_p2R5Xvb0DVUh2PbNe7HV18_tG5NMaABSa8B9WR6Q3RiefUhQ&_nc_ohc=L0iuWr4RHe4Q7kNvgE5AenI&_nc_ht=scontent.famm7-1.fna&oh=00_AYAVAR6B8tL6UDCo2n0qFGnLamZ7tuvgdC8IMrQK9JXCCw&oe=66B697B2",
-    imgAlt: "Client thumb",
-    name: "Muhammad-Shurrab",
-    date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "هذا المنتج رهيب 💙",
-  },
-  {
-    imgUrl: "/src/assets/images/warshtK/malek.png",
-    imgAlt: "Client thumb",
-    name: "Malek",
-    date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "كانت تجربة جميلة التعامل معكم",
-  },
-  {
-    imgUrl: "/src/assets/images/warshtK/yousef.png",
-    imgAlt: "Yousef",
-    name: "Yousef",
-    date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "خدمة مميزة في التوصيل",
-  },
-  {
-    imgUrl: "/src/assets/images/warshtK/abd.png",
-    imgAlt: "Abealmajeed",
-    name: "Abealmajeed",
-    date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "جودة المنتج عالية جدا",
-  },
-];
+const ProductFeedback = ({ productId, token }) => {
+  const [feedback, setFeedback] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalRatings, setTotalRatings] = useState(0);
+  const [newFeedback, setNewFeedback] = useState({
+    productId: productId,
+    rating: 5,
+    comment: "",
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-const Review = () => {
-  const [reviewShow, setReviewShow] = useState(true);
+  useEffect(() => {
+    fetchFeedbackData();
+    setNewFeedback((prev) => ({ ...prev, productId }));
+  }, [productId]);
+
+  const fetchFeedbackData = async () => {
+    try {
+      const [feedbackRes, averageRes] = await Promise.all([
+        axios.get(`http://localhost:3000/api/feedback/product/${productId}`),
+        axios.get(
+          `http://localhost:3000/api/feedback/product/${productId}/average`
+        ),
+      ]);
+
+      setFeedback(feedbackRes.data);
+      setAverageRating(averageRes.data.averageRating);
+      setTotalRatings(averageRes.data.totalRatings);
+    } catch (err) {
+      setError("Failed to load feedback data");
+      console.error("Error fetching feedback:", err);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const feedbackData = {
+        productId: productId,
+        rating: newFeedback.rating,
+        comment: newFeedback.comment,
+      };
+
+      const res = await axios.post(
+        `http://localhost:3000/api/feedback/product/${productId}`,
+        feedbackData,
+        { withCredentials: true }
+      );
+
+      setFeedback([res.data, ...feedback]);
+      setNewFeedback({
+        productId: productId,
+        rating: 5,
+        comment: "",
+      });
+      setSuccess("Feedback submitted successfully!");
+      fetchFeedbackData();
+    } catch (err) {
+      console.error("Error submitting feedback:", err);
+      setError(err.response?.data?.message || "Failed to submit feedback");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderStars = (rating, interactive = false) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating - fullStars >= 0.5;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    return (
+      <>
+        {Array(fullStars)
+          .fill(0)
+          .map((_, index) => (
+            <FaStar
+              key={`full-${index}`}
+              className="text-theme"
+              style={{
+                cursor: interactive ? "pointer" : "default",
+                fontSize: "1.5rem",
+              }}
+              onClick={
+                interactive
+                  ? () => setNewFeedback({ ...newFeedback, rating: index + 1 })
+                  : undefined
+              }
+            />
+          ))}
+        {halfStar && (
+          <FaStarHalfAlt
+            className="text-theme"
+            style={{
+              cursor: interactive ? "pointer" : "default",
+              fontSize: "1.5rem",
+            }}
+            onClick={
+              interactive
+                ? () =>
+                    setNewFeedback({ ...newFeedback, rating: fullStars + 0.5 })
+                : undefined
+            }
+          />
+        )}
+        {Array(emptyStars)
+          .fill(0)
+          .map((_, index) => (
+            <FaRegStar
+              key={`empty-${index}`}
+              className="text-theme"
+              style={{
+                cursor: interactive ? "pointer" : "default",
+                fontSize: "1.5rem",
+              }}
+              onClick={
+                interactive
+                  ? () =>
+                      setNewFeedback({ ...newFeedback, rating: fullStars + 1 })
+                  : undefined
+              }
+            />
+          ))}
+      </>
+    );
+  };
+
   return (
-    <>
-      {" "}
-      <ul
-        className={`review-nav lab-ul ${
-          reviewShow ? "RevActive" : "DescActive"
-        }`}
-      >
-        <li onClick={() => setReviewShow(!reviewShow)} className="desc">
-          Description
-        </li>
-      </ul>
-      <div
-        className={`review-content ${
-          reviewShow ? "review-content-show" : "description-show"
-        }`}
-      >
-        <div className="review-showing">
-          <ul className="content lab-ul">
-            {ReviewList.map((review, i) => (
-              <li key={i}>
-                <div className="post-thumb">
-                  <img src={`${review.imgUrl}`} alt={`${review.imgAlt}`} />
-                </div>
-                <div className="post-content">
-                  <div className="entry-meta">
-                    <div className="posted-on">
-                      <a href="#">{review.name}</a>
-                      <p>{review.date}</p>
-                    </div>
-                    <Rating />
-                  </div>
-                  <div className="entry-content">
-                    <p>{review.desc}</p>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div className="client-review">
-            <div className="review-form">
-              <div className="review-title">
-                <h5>{reviwtitle}</h5>
-              </div>
-              <form action="action" className="row">
-                <div className="col-md-4 col-12">
-                  <input type="text" name="name" placeholder="Full Name *" />
-                </div>
-                <div className="col-md-4 col-12">
-                  <input type="text" name="email" placeholder="Your Email *" />
-                </div>
-                <div className="col-md-4 col-12">
-                  <div className="rating">
-                    <span className="rating-title">Your Rating : </span>
-                    <Rating />
-                  </div>
-                </div>
-                <div className="col-md-12 col-12">
-                  <textarea
-                    rows="8"
-                    type="text"
-                    name="message"
-                    placeholder="Type Here Message"
-                  ></textarea>
-                </div>
-                <div className="col-12">
-                  <button className="default-button" type="submit">
-                    <span>Submit Review</span>
-                  </button>
-                </div>
-              </form>
-            </div>
+    <div className="container my-5">
+      <style>
+        {`
+          .lab-btn {
+            background-color: rgb(241, 97, 38);
+            color: white;
+            border: none;
+          }
+          .lab-btn:hover {
+            background-color: rgb(220, 85, 30);
+          }
+          .text-theme {
+            color: rgb(241, 97, 38) !important;
+          }
+        `}
+      </style>
+
+      {/* Average Rating Display */}
+      <div className="card shadow mb-4 border-0">
+        <div className="card-body text-center">
+          <h5 className="card-title text-secondary">Overall Rating</h5>
+          <div className="display-4 mb-2 text-theme">
+            {averageRating.toFixed(1)}
           </div>
+          <div className="mb-2">{renderStars(Math.round(averageRating))}</div>
+          <p className="text-muted">
+            Based on {totalRatings} {totalRatings === 1 ? "review" : "reviews"}
+          </p>
         </div>
-        {/* <div className="description">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <div className="post-item">
-            <div className="post-thumb">
-              <img src="/src/assets/images/shop/01.jpg" alt="shop" />
-            </div>
-            <div className="post-content">
-              <ul className="lab-ul">
-                <li>Donec non est at libero vulputate rutrum.</li>
-                <li>Morbi ornare lectus quis justo gravida semper.</li>
-                <li>Pellentesque aliquet, sem eget laoreet ultrices.</li>
-                <li>
-                  Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id
-                  nulla.
-                </li>
-                <li>Donec a neque libero.</li>
-                <li>Pellentesque aliquet, sem eget laoreet ultrices.</li>
-                <li>Morbi ornare lectus quis justo gravida semper..</li>
-              </ul>
-            </div>
-          </div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-        </div> */}
       </div>
-    </>
+
+      {/* Feedback Form */}
+      <div className="card shadow mb-4 border-0">
+        <div className="card-body">
+          <h5 className="card-title text-secondary">Write a Review</h5>
+          {error && <div className="alert alert-danger">{error}</div>}
+          {success && <div className="alert alert-success">{success}</div>}
+
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label className="form-label">Rating</label>
+              <div className="mb-2">
+                {renderStars(newFeedback.rating, true)}
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Comment</label>
+              <textarea
+                className="form-control"
+                rows="3"
+                value={newFeedback.comment}
+                onChange={(e) =>
+                  setNewFeedback({
+                    ...newFeedback,
+                    comment: e.target.value,
+                  })
+                }
+                required
+                placeholder="Share your experience..."
+              />
+            </div>
+
+            <button type="submit" className="lab-btn w-100" disabled={loading}>
+              {loading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Submitting...
+                </>
+              ) : (
+                "Submit Review"
+              )}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Feedback List */}
+      <div className="card shadow border-0">
+        <div className="card-body">
+          <h5 className="card-title text-secondary">Reviews</h5>
+          {feedback.length === 0 ? (
+            <p className="text-muted">No reviews yet</p>
+          ) : (
+            feedback.map((item) => (
+              <div key={item._id} className="border-bottom mb-3 pb-3">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <div>
+                    <strong>{item.user.name}</strong>
+                    <br />
+                    <small className="text-muted">
+                      {new Date(item.createdAt).toLocaleDateString()}
+                    </small>
+                  </div>
+                  <div>{renderStars(item.rating)}</div>
+                </div>
+                <p className="mb-0">{item.comment}</p>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Review;
+export default ProductFeedback;
