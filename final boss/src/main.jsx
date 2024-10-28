@@ -4,14 +4,20 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import App from "./App.jsx";
 import "./index.css";
 import "swiper/css";
-// bootstrap css
+// Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
-// fonts and icons
+// Fonts and icons
 import "././assets/css/icofont.min.css";
 import "././assets/css/animate.css";
 import "././assets/css/style.min.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Home from "./pages/Home/Home.jsx";
 import Shop from "./pages/Shop/Shop.jsx";
 import SingleProduct from "./pages/Shop/SingleProduct.jsx";
@@ -28,6 +34,14 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute.jsx";
 import AuthProvider from "./contexts/AuthProvider.jsx";
 import UserProfile from "./components/UserProfile.jsx";
 import OrderConfirmation from "./pages/Shop/OrderConfirmation.jsx"; // New component for order confirmation
+import Sidebar from "./dashboard/Sidebar.jsx";
+import DashboardLayout from "./dashboard/DashboardLayout.jsx"; // Ensure this is imported
+import Overview from "./dashboard/Overview.jsx";
+import Users from "./dashboard/Users.jsx";
+import Products from "./dashboard/Products.jsx";
+import Orders from "./dashboard/Orders.jsx";
+import Reviews from "./dashboard/Reviews.jsx";
+import DashboardContact from "./dashboard/Contact.jsx"; // Rename to avoid confusion with Contact
 
 const router = createBrowserRouter([
   {
@@ -66,6 +80,27 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />,
+      },
+      {
+        path: "/admin/*", // Catch all sub-paths for admin
+        element: (
+          <DashboardLayout>
+            <Routes>
+              <Route
+                path="/"
+                element={<Navigate to="/admin/overview" replace />}
+              />
+              <Route path="overview" element={<Overview />} />
+              <Route path="users" element={<Users />} />
+              <Route path="products" element={<Products />} />
+              <Route path="orders" element={<Orders />} />
+              <Route path="reviews" element={<Reviews />} />
+              <Route path="contact" element={<DashboardContact />} />
+              {/* 404 catch-all route */}
+              <Route path="*" element={<div>404: Page Not Found</div>} />
+            </Routes>
+          </DashboardLayout>
+        ),
       },
       {
         path: "/cart-page",

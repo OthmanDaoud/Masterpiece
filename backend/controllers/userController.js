@@ -67,7 +67,6 @@ exports.signUp = async (req, res) => {
     // Hash the password before saving
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    console.log("Hashed Password during Signup:", hashedPassword); // Log for verification
 
     const otp = generateOTP(); // Assuming you have a generateOTP function
     const otpExpiry = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
@@ -81,10 +80,8 @@ exports.signUp = async (req, res) => {
     });
 
     await newUser.save();
-    console.log("User saved successfully:", newUser);
 
     await sendOTP(email, otp); // Assuming you have a sendOTP function
-    console.log("OTP sent to:", email);
 
     res
       .status(201)

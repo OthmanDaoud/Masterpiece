@@ -8,6 +8,7 @@ const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const feedBackRoutes = require("./routes/feedBackRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const adminUserRoutes = require("./routes/adminUserRoutes");
 
 const corsOptions = {
   origin: "http://localhost:5173", // Your frontend origin
@@ -30,6 +31,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/feedback", feedBackRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/admin", adminUserRoutes);
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`Server running on port ${port}`));

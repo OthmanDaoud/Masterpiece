@@ -15,6 +15,8 @@ const SingleProduct = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
 
+  console.log("please man", product);
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -92,8 +94,10 @@ const SingleProduct = () => {
                 </div>
 
                 <div className="review">
+                  {console.log("gojo", product.ratingsCount)}
                   <Review
-                    productId={id}
+                    productId={product._id}
+                    productName={product.name}
                     initialRating={product.ratings}
                     initialRatingsCount={product.ratingsCount}
                   />

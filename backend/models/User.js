@@ -25,6 +25,8 @@ const userSchema = new mongoose.Schema({
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters long"],
   },
+  isActive: { type: Boolean, default: true }, // For soft deletion and status toggle
+
   otp: {
     type: String,
     required: false, // Optional, as not every user will have OTP

@@ -3,15 +3,22 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
-const ProductFeedback = ({ productId, token }) => {
+const Review = ({
+  productId,
+  productName,
+  initialRating,
+  initialRatingsCount,
+}) => {
   const [feedback, setFeedback] = useState([]);
-  const [averageRating, setAverageRating] = useState(0);
-  const [totalRatings, setTotalRatings] = useState(0);
+  const [averageRating, setAverageRating] = useState(initialRating || 0);
+  const [totalRatings, setTotalRatings] = useState(initialRatingsCount || 0);
   const [newFeedback, setNewFeedback] = useState({
     productId: productId,
     rating: 5,
     comment: "",
   });
+
+  console.log("yuta", productId);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,13 +53,6 @@ const ProductFeedback = ({ productId, token }) => {
     setSuccess("");
 
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      };
-
       const feedbackData = {
         productId: productId,
         rating: newFeedback.rating,
@@ -159,11 +159,12 @@ const ProductFeedback = ({ productId, token }) => {
           }
         `}
       </style>
-
       {/* Average Rating Display */}
       <div className="card shadow mb-4 border-0">
         <div className="card-body text-center">
-          <h5 className="card-title text-secondary">Overall Rating</h5>
+          <h5 className="card-title text-secondary">
+            Overall Rating for {productName}
+          </h5>
           <div className="display-4 mb-2 text-theme">
             {averageRating.toFixed(1)}
           </div>
@@ -173,7 +174,6 @@ const ProductFeedback = ({ productId, token }) => {
           </p>
         </div>
       </div>
-
       {/* Feedback Form */}
       <div className="card shadow mb-4 border-0">
         <div className="card-body">
@@ -223,7 +223,6 @@ const ProductFeedback = ({ productId, token }) => {
           </form>
         </div>
       </div>
-
       {/* Feedback List */}
       <div className="card shadow border-0">
         <div className="card-body">
@@ -231,21 +230,26 @@ const ProductFeedback = ({ productId, token }) => {
           {feedback.length === 0 ? (
             <p className="text-muted">No reviews yet</p>
           ) : (
-            feedback.map((item) => (
-              <div key={item._id} className="border-bottom mb-3 pb-3">
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                  <div>
-                    <strong>{item.user.name}</strong>
-                    <br />
-                    <small className="text-muted">
-                      {new Date(item.createdAt).toLocaleDateString()}
-                    </small>
+            feedback.map(
+              (item) => (
+                console.log("pleeeees", feedback),
+                (
+                  <div key={item._id} className="border-bottom mb-3 pb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <div>
+                        <strong>{item.user.name}</strong>
+                        <br />
+                        <small className="text-muted">
+                          {new Date(item.createdAt).toLocaleDateString()}
+                        </small>
+                      </div>
+                      <div>{renderStars(item.rating)}</div>
+                    </div>
+                    <p className="mb-0">{item.comment}</p>
                   </div>
-                  <div>{renderStars(item.rating)}</div>
-                </div>
-                <p className="mb-0">{item.comment}</p>
-              </div>
-            ))
+                )
+              )
+            )
           )}
         </div>
       </div>
@@ -253,4 +257,4 @@ const ProductFeedback = ({ productId, token }) => {
   );
 };
 
-export default ProductFeedback;
+export default Review;

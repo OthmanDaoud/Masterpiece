@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-no-target-blank */
 
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const title = "About warshtK";
 const desc =
@@ -90,6 +91,12 @@ const quickList = [
 ];
 
 const Footer = () => {
+  const location = useLocation(); // Get the current location
+
+  const isAdminPath = location.pathname.startsWith("/admin"); // Check if the current path starts with "/admin"
+
+  if (isAdminPath) return null;
+
   return (
     <footer style={{ backgroundColor: "RGB(6,17,60)" }}>
       <div className="footer-top dark-view padding-tb">

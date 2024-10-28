@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie"; // Import the js-cookie library
 import logo from "../assets/images/logo/logo.png";
 import { AuthContext } from "../contexts/AuthProvider";
@@ -12,6 +12,11 @@ const NavItems = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
   const { user, setUser } = useContext(AuthContext); // Ensure setUser is available in your context
   const navigate = useNavigate(); // Use React Router's navigate hook for redirection
+  const location = useLocation(); // Get the current location
+
+  const isAdminPath = location.pathname.startsWith("/admin"); // Check if the current path starts with "/admin"
+
+  if (isAdminPath) return null;
 
   // Check if the user is logged in based on cookies
   useEffect(() => {
