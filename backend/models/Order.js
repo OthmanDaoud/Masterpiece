@@ -49,5 +49,7 @@ const orderSchema = new Schema({
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ paypalPaymentId: 1 }, { unique: true });
 
-const Order = mongoose.model("Order", orderSchema);
+// Check if the model is already compiled before defining it
+const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
+
 module.exports = Order;

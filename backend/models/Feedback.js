@@ -28,7 +28,14 @@ const feedbackSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const Feedback = mongoose.model("Feedback", feedbackSchema);
+// Check if the model already exists to avoid overwriting it
+const Feedback =
+  mongoose.models.Feedback || mongoose.model("Feedback", feedbackSchema);
+
 module.exports = Feedback;

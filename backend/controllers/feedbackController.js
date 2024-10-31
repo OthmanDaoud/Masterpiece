@@ -10,7 +10,8 @@ exports.getProductFeedback = async (req, res) => {
       return res.status(400).json({ message: "Invalid product ID" });
     }
 
-    const feedback = await Feedback.find({ product: productId })
+    // Only fetch feedback that has not been marked as deleted
+    const feedback = await Feedback.find({ product: productId, deleted: false })
       .populate("user", "name email")
       .sort({ createdAt: -1 });
 
@@ -29,8 +30,14 @@ exports.getAverageRating = async (req, res) => {
       return res.status(400).json({ message: "Invalid product ID" });
     }
 
+    // Only consider non-deleted feedback in the aggregation
     const result = await Feedback.aggregate([
-      { $match: { product: new mongoose.Types.ObjectId(productId) } },
+      {
+        $match: {
+          product: new mongoose.Types.ObjectId(productId),
+          deleted: false,
+        },
+      },
       {
         $group: {
           _id: "$product",
@@ -58,7 +65,6 @@ exports.createFeedback = async (req, res) => {
     const { productId, rating, comment } = req.body;
     const userId = req.user;
 
-    // Validation
     if (!mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({ message: "Invalid product ID" });
     }
@@ -75,17 +81,16 @@ exports.createFeedback = async (req, res) => {
         .json({ message: "Comment must be at least 3 characters long" });
     }
 
-    // Check if product exists
     const product = await Product.findById(productId).session(session);
     if (!product) {
       await session.abortTransaction();
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Check for existing feedback
     const existingFeedback = await Feedback.findOne({
       product: productId,
       user: userId,
+      deleted: false,
     }).session(session);
 
     if (existingFeedback) {
@@ -95,7 +100,6 @@ exports.createFeedback = async (req, res) => {
       });
     }
 
-    // Create feedback
     const feedback = await Feedback.create(
       [
         {
@@ -108,10 +112,8 @@ exports.createFeedback = async (req, res) => {
       { session }
     );
 
-    // Calculate new average rating
     const newRating = await calculateNewRating(productId, rating, session);
 
-    // Update product
     await Product.findByIdAndUpdate(
       productId,
       {
@@ -121,7 +123,6 @@ exports.createFeedback = async (req, res) => {
       { session }
     );
 
-    // Populate user details
     const populatedFeedback = await Feedback.findById(feedback[0]._id)
       .populate("user", "name email")
       .session(session);
@@ -140,7 +141,12 @@ exports.createFeedback = async (req, res) => {
 async function calculateNewRating(productId, newRating, session) {
   try {
     const result = await Feedback.aggregate([
-      { $match: { product: new mongoose.Types.ObjectId(productId) } },
+      {
+        $match: {
+          product: new mongoose.Types.ObjectId(productId),
+          deleted: false,
+        },
+      },
       {
         $group: {
           _id: null,
