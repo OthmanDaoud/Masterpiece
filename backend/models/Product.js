@@ -28,7 +28,7 @@ const productSchema = new Schema(
     },
     ratings: {
       type: Number,
-      required: [true, "Ratings is required"],
+      // required: [true, "Ratings is required"],
       min: [0, "Rating cannot be negative"],
       max: [5, "Rating cannot exceed 5"],
     },
