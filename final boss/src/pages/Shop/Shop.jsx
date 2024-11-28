@@ -81,10 +81,10 @@ const Shop = () => {
               <aside>
                 <Search products={products} GridList={GridList} />
                 {/* Use handleCategoryChange for the ShopCategory filter */}
-                <ShopCategory
+                {/* <ShopCategory
                   filterItem={handleCategoryChange}
                   selectedCategory={selectedCategory}
-                />
+                /> */}
                 <PopularPost />
               </aside>
             </div>

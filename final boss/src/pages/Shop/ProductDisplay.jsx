@@ -78,15 +78,15 @@ const ProductDisplay = ({ item }) => {
     <div>
       <div>
         <h4>{name}</h4>
-        <p className="rating">
+        {/* <p className="rating">
           <i className="icofont-star"></i>
           <i className="icofont-star"></i>
           <i className="icofont-star"></i>
           <i className="icofont-star"></i>
           <i className="icofont-star"></i>
           (3 review)
-        </p>
-        <h4>${price}</h4>
+        </p> */}
+        <h4>{price} JD</h4>
         <h6>{seller}</h6>
         <p>{desc}</p>
       </div>
@@ -108,13 +108,13 @@ const ProductDisplay = ({ item }) => {
               +
             </div>
           </div>
-          <div className="discount-code mb-2">
+          {/* <div className="discount-code mb-2">
             <input
               type="text"
               placeholder="Enter Discount Code"
               onChange={(e) => setCoupon(e.target.value)}
             />
-          </div>
+          </div> */}
           <button type="submit" className="lab-btn">
             <span>Add To Cart</span>
           </button>

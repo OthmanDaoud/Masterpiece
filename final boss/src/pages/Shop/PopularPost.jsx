@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const title = "Most Popular Stores";
+const title = "Most Popular Stores We Worked With";
 
 const postList = [
   {

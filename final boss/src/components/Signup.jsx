@@ -172,10 +172,10 @@ const Signup = () => {
                 <span className="d-block cate pt-10">
                   Are you a member? <Link to="/login">Login</Link>
                 </span>
-                <span className="or">
+                {/* <span className="or">
                   <span>or</span>
                 </span>
-                <h5 className="subtitle">{socialTitle}</h5>
+                <h5 className="subtitle">{socialTitle}</h5> */}
               </>
             ) : (
               <span className="d-block cate pt-10">

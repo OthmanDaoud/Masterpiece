@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { motion } from "framer-motion";
 import DashboardPagination from "./CustomComponents/DashboardPagination";
 import DashboardSearch from "./CustomComponents/DashboardSearch";
-import { motion } from "framer-motion";
 
 const UsersManagement = () => {
   const [users, setUsers] = useState([]);
@@ -91,16 +90,19 @@ const UsersManagement = () => {
           style={{ borderRadius: "15px", overflow: "hidden" }}
         >
           <div className="card-body p-4">
-            <div className="row align-items-center">
-              <div className="col-md-6">
-                <h2 className="mb-0" style={{ color: THEME_COLOR }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h2
+                  className="mb-0 text-xl md:text-2xl"
+                  style={{ color: THEME_COLOR }}
+                >
                   User Management
                 </h2>
                 <p className="text-muted mb-0 mt-2">
                   Total Users: {users.length}
                 </p>
               </div>
-              <div className="col-md-6">
+              <div>
                 <DashboardSearch
                   searchTerm={searchTerm}
                   setSearchTerm={setSearchTerm}

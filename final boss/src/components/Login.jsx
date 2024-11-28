@@ -118,17 +118,17 @@ const Login = () => {
             <span className="d-block cate pt-10">
               Don’t Have an Account? <Link to="/sign-up">Sign Up</Link>
             </span>
-            <span className="or">
+            {/* <span className="or">
               <span>or</span>
-            </span>
-            <h5 className="subtitle">{socialTitle}</h5>
-            <ul className="lab-ul social-icons justify-content-center">
+            </span> */}
+            {/* <h5 className="subtitle">{socialTitle}</h5> */}
+            {/* <ul className="lab-ul social-icons justify-content-center">
               <li>
                 <button className="github">
                   <i className="icofont-github"></i>
                 </button>
               </li>
-            </ul>
+            </ul> */}
           </div>
         </div>
       </div>

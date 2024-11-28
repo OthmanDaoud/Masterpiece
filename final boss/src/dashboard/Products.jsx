@@ -3,15 +3,6 @@ import { api } from "./CustomComponents/api";
 import ProductList from "./CustomComponents/ProductList";
 import ProductForm from "./CustomComponents/ProductForm";
 import DashboardPagination from "./CustomComponents/DashboardPagination";
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Form,
-  Alert,
-  Spinner,
-} from "react-bootstrap";
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -93,52 +84,55 @@ const ProductManagement = () => {
   };
 
   return (
-    <Container fluid className="py-4">
-      <Row className="mb-4">
-        <Col>
-          <h1 className="mb-4" style={{ color: "rgb(241,97,38)" }}>
-            Product Management
-          </h1>
-          <div className="d-flex justify-content-between align-items-center">
-            <Form.Group style={{ width: "300px" }}>
-              <Form.Control
-                type="text"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  borderColor: "rgb(241,97,38)",
-                }}
-              />
-            </Form.Group>
-            <Button
-              style={{ backgroundColor: "rgb(241,97,38)", border: "none" }}
-              onClick={() => setShowForm(true)}
-            >
-              Add New Product
-            </Button>
-          </div>
-        </Col>
-      </Row>
+    <div className="container py-4">
+      <div className="mb-4 d-flex justify-content-between align-items-center">
+        <h1 className="h4" style={{ color: "rgb(241,97,38)" }}>
+          Product Management
+        </h1>
+        <div className="d-flex align-items-center">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="form-control mr-3"
+            style={{ width: "300px" }}
+          />
+          <button
+            className="btn"
+            style={{ backgroundColor: "rgb(241,97,38)", color: "white" }}
+            onClick={() => setShowForm(true)}
+          >
+            Add New Product
+          </button>
+        </div>
+      </div>
 
       {loading ? (
         <div className="text-center">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
+          <div
+            className="spinner-border animate-spin text-warning"
+            role="status"
+            style={{ width: "3rem", height: "3rem" }}
+          >
+            <span className="sr-only">Loading...</span>
+          </div>
         </div>
       ) : error ? (
-        <Alert variant="danger">{error}</Alert>
+        <div className="alert alert-danger">{error}</div>
       ) : (
         <>
-          <ProductList
-            products={displayedProducts}
-            onEdit={(product) => {
-              setSelectedProduct(product);
-              setShowForm(true);
-            }}
-            onDelete={handleDelete}
-          />
+          <div className="p-3">
+            <ProductList
+              products={displayedProducts}
+              onEdit={(product) => {
+                setSelectedProduct(product);
+                setShowForm(true);
+              }}
+              onDelete={handleDelete}
+            />
+          </div>
+
           {totalPages > 1 && (
             <DashboardPagination
               totalPages={totalPages}
@@ -162,7 +156,7 @@ const ProductManagement = () => {
             : handleCreate
         }
       />
-    </Container>
+    </div>
   );
 };
 

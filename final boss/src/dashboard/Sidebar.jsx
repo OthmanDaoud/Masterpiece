@@ -43,7 +43,7 @@ const Sidebar = () => {
   };
 
   const sidebarStyle = {
-    width: isOpen ? "250px" : "100px",
+    width: isOpen ? "250px" : "80px",
     minHeight: "100vh",
     backgroundColor: "rgb(241,97,38)",
     color: "white",
